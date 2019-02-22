@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./lib/vue.js"></script>
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>{{prices1}}</h1>
+        <p v-if="show">zmh</p>
+        <button v-on:click="handleClose">点击隐藏</button>
+    </div>
+
+    <script>
+        var vm=new Vue({
+            el:'#app',
+            data:{
+                flag:true,
+                list:{},
+                name:'',
+                a:2,
+                show:true,
+                date:new Date(),
+                text:'133,456,789',
+                package1:[
+                    {
+                        name:'1',
+                        price:1,
+                        count:2
+                    },
+                    {
+                        name:'2',
+                        price:2,
+                        count:3
+                    }
+                ]
+            },
+            computed:{
+                reversedText:function(){
+                    return this.text.split(',').reverse().join(',');
+                },
+                prices1:function(){
+                    var prices=0;
+                    for(var i=0;i<this.package1.length;i++){
+                        prices+=this.package1[i].price*this.package1[i].count;
+                    }
+                    return prices;
+                }
+            },
+            methods:{
+                handleClose:function(){
+                    this.close();
+                },
+                close:function(){
+                    this.show=!this.show;
+                }
+            },
+            created:function(){
+                console.log(this.a);
+            },
+            mounted:function(){
+                var _this=this;
+                this.timer=setInterval(function(){_this.date=new Date;},1000);
+            },
+            beforeDestroy:function(){
+                if(this.timer){
+                    clearInterval(this.timer);
+                }
+            },
+            filters:{
+                formatDate:function(value){
+
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
