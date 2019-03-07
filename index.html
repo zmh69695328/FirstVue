@@ -6,21 +6,57 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="./lib/vue.js"></script>
     <title>Document</title>
-    <style>
-
-    </style>
+    
 </head>
 <body>
     <div id="app">
         <h1>{{prices1}}</h1>
         <p v-if="show">zmh</p>
         <button v-on:click="handleClose">点击隐藏</button>
+        <a href="www.baidu.com" @click="handleClick('禁止打开',$event)">打开链接</a>
+        <input type="checkbox" v-model="checked" value="js1" id="js">
+        <label for="js">javascript</label>
+        <br>
+        <input type="checkbox" v-model="checked" value="css1" id="css">
+        <label for="css">css</label>
+        <br>
+        <p>选择的是{{checked}}</p>
+
+        <select v-model="selected">
+            <option v-for="option in options" :value="option.value">{{option.text}}</option>
+        </select>
+        <p>选择的是:{{selected}}</p>
+
+        <input type="radio" v-model="picked" :value="value">
+        <label>单选按钮</label>
+        <p>{{picked}}</p>
+        <p>{{value}}</p>
+
+        <input type="text" v-model="value1" value="233333333">
+        <p>111  {{value1}}</p>
+    </div>
+
+    <div id="app1" >
+
+
     </div>
 
     <script>
+        new Vue({
+            el:'#app1',
+            data:{
+                
+            }
+        });
         var vm=new Vue({
             el:'#app',
             data:{
+                value1:'',
+                picked:false,
+                value:123,
+                selected:'html',
+                options:[{text:'html',value:'html'},{text:'javascript',value:'js'}],
+                checked:['html','css'],
                 flag:true,
                 list:{},
                 name:'',
@@ -59,6 +95,10 @@
                 },
                 close:function(){
                     this.show=!this.show;
+                },
+                handleClick:function(message,event){
+                    event.preventDefault();
+                    window.alert(message);
                 }
             },
             created:function(){
