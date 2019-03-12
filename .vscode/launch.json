@@ -23,6 +23,26 @@
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-DemoApplication<demo-zmh>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.zmh.demozmh.DemoApplication",
+            "projectName": "demo-zmh",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-DemoApplication<springboot-demo>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.zmh.springbootdemo.DemoApplication",
+            "projectName": "springboot-demo",
+            "args": ""
         }
     ]
 }
