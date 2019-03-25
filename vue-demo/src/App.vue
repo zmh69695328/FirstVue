@@ -1,27 +1,42 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    </div>
+    <vue-waterfall-easy :maxCols="3" :imgsArr="imgsArr" @scrollReachBottom="fetchImgsData"></vue-waterfall-easy>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import vueWaterfallEasy from "vue-waterfall-easy";
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
-</script>
+  name: "app",
+  components: { vueWaterfallEasy },
+  data() {
+    return {
+      imgsArr: [], //存放所有已加载图片的数组（即当前页面会加载的所有图片）
+      fetchImgsArr: [] //存放每次滚动时下一批要加载的图片的数组
+    };
+  },
+  methods: {
+    initImgsArr(n, m) {
+      //初始化图片数组的方法，把要加载的图片装入
+      var arr = [];
+      for (var i = n; i < m; i++) {
+        arr.push({
+          src: require(`./assets/img/${i + 1}.jpg`),
+          link: "",
+          info: "一些图片描述文字"
+        }); //src为加载的图片的地址、link为超链接的链接地址、 //info为自定义的图片展示信息，请根据自己的情况自行填写
+      }
+      return arr;
+    },
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+    fetchImgsData() {
+      //获取新的图片数据的方法，用于页面滚动满足条件时调用
+      this.imgsArr = this.imgsArr.concat(this.fetchImgsArr); //数组拼接，把下一批要加载的图片放入所有图片的数组中
+    }
+  },
+  created() {
+    this.imgsArr = this.initImgsArr(0, 7); //初始化第一次（即页面加载完毕时）要加载的图片数据
+    this.fetchImgsArr = this.initImgsArr(5, 10); // 模拟每次请求的下一批新的图片的数据数据
+  }
+};
+</script>
