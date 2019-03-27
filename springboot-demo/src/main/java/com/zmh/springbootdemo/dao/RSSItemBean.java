@@ -27,12 +27,13 @@ public class RSSItemBean {
 	private Date pubDate;
 	@JSONField(name = "TYPE")
 	private String type;
+	private String img;
 
 	public RSSItemBean() {
 	}
 
 	public RSSItemBean(String title, String author, String uri, String link, String description, Date pubDate,
-			String type) {
+			String type, String img) {
 		this.title = title;
 		this.author = author;
 		this.uri = uri;
@@ -40,6 +41,7 @@ public class RSSItemBean {
 		this.description = description;
 		this.pubDate = pubDate;
 		this.type = type;
+		this.img = img;
 	}
 
 	public String getTitle() {
@@ -98,6 +100,14 @@ public class RSSItemBean {
 		this.type = type;
 	}
 
+	public String getImg() {
+		return this.img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
 	public RSSItemBean title(String title) {
 		this.title = title;
 		return this;
@@ -133,6 +143,11 @@ public class RSSItemBean {
 		return this;
 	}
 
+	public RSSItemBean img(String img) {
+		this.img = img;
+		return this;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this)
@@ -144,18 +159,19 @@ public class RSSItemBean {
 		return Objects.equals(title, rSSItemBean.title) && Objects.equals(author, rSSItemBean.author)
 				&& Objects.equals(uri, rSSItemBean.uri) && Objects.equals(link, rSSItemBean.link)
 				&& Objects.equals(description, rSSItemBean.description) && Objects.equals(pubDate, rSSItemBean.pubDate)
-				&& Objects.equals(type, rSSItemBean.type);
+				&& Objects.equals(type, rSSItemBean.type) && Objects.equals(img, rSSItemBean.img);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(title, author, uri, link, description, pubDate, type);
+		return Objects.hash(title, author, uri, link, description, pubDate, type, img);
 	}
 
 	@Override
 	public String toString() {
 		return "{" + " title='" + getTitle() + "'" + ", author='" + getAuthor() + "'" + ", uri='" + getUri() + "'"
 				+ ", link='" + getLink() + "'" + ", description='" + getDescription() + "'" + ", pubDate='"
-				+ getPubDate() + "'" + ", type='" + getType() + "'" + "}";
+				+ getPubDate() + "'" + ", type='" + getType() + "'" + ", img='" + getImg() + "'" + "}";
 	}
+
 }

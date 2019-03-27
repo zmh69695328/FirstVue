@@ -23,17 +23,17 @@ import com.zmh.springbootdemo.dao.*;
 
 @RestController
 public class HelloWorld {
-    @GetMapping("/hello")
+    @GetMapping("/news")
     @CrossOrigin
     public String helloworld() {
         String rssUrl = "https://rsshub.app/thepaper/featured";
         System.out.println("1111");
         List<RSSItemBean> rssList = getAllRssItemBeanList(rssUrl);
-        for (int i = 0; i < rssList.size(); i++) {
-            System.out.println(rssList.get(i).getDescription());
-            System.out.println("--------------------------------------------------------------------------");
+        // for (int i = 0; i < rssList.size(); i++) {
+        // System.out.println(rssList.get(i).getDescription());
+        // System.out.println("--------------------------------------------------------------------------");
 
-        }
+        // }
 
         String jsonOutput = JSON.toJSONString(rssList);
         // System.out.println("22 " + jsonOutput);
@@ -55,15 +55,37 @@ public class HelloWorld {
 
             for (SyndEntry entry : entries) {
                 item = new RSSItemBean();
+                String tmp = entry.getDescription().getValue();
+                int idx = tmp.indexOf("img src=");
+                int st = 0, ed = 0;
+                item.setDescription(tmp);
+                if (idx == -1) {
+                    item.setImg("");
+                } else {
+                    System.out.println("---------------------------------------------");
+                    for (int i = idx, cnt = 0; i < tmp.length(); i++) {
+                        System.out.println(tmp.charAt(i));
+                        if (tmp.charAt(i) == '"') {
+                            if (cnt == 0) {
+
+                                st = i;
+                                cnt++;
+                            } else if (cnt == 1) {
+                                ed = i;
+                                break;
+                            }
+                        }
+                    }
+                    item.setImg(tmp.substring(st + 1, ed));
+                }
 
                 item.setTitle(entry.getTitle().trim());
                 item.setType(feed.getTitleEx().getValue().trim());
                 item.setUri(entry.getUri());
                 item.setPubDate(entry.getPublishedDate());
                 item.setAuthor(entry.getAuthor());
-                item.setDescription(entry.getDescription().getValue());
-                rssItemBeans.add(item);
 
+                rssItemBeans.add(item);
             }
             return rssItemBeans;
 
@@ -73,4 +95,5 @@ public class HelloWorld {
         }
 
     }
+
 }
