@@ -15,11 +15,11 @@ Vue.use(Antd);
 Vue.use(VueRouter);
 
 
-import News from "./components/News.vue";
+import NewsList from "./components/NewsList.vue";
 import Home from "./components/Home.vue";
 import Test from "./components/Test.vue"
 const routes = [
-  { path: '/news', component: News },
+  { path: '/newslist', component: NewsList },
   { path: '/home', component: Home },
   { path: '/Test', component: Test }
 ]

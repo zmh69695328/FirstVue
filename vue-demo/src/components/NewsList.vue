@@ -1,46 +1,48 @@
 <template>
-  <a-layout id="components-layout-demo-custom-trigger">
-    <a-layout-sider :style="{height: '100vh'}" :trigger="null" collapsible v-model="collapsed">
-      <div class="logo"/>
-      <a-menu theme="dark" mode="inline" :defaultSelectedKeys="['1']">
-        <a-menu-item key="1">
-          <a-icon type="user"/>
-          <span>发现</span>
-          <router-link to="/newslist"></router-link>
-        </a-menu-item>
-        <a-menu-item key="2">
-          <a-icon type="video-camera"/>
-          <span>我的订阅</span>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <a-icon type="upload"/>
-          <span>我的收藏</span>
-        </a-menu-item>
-      </a-menu>
-    </a-layout-sider>
-    <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
-        <a-icon
-          class="trigger"
-          :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-          @click="()=> collapsed = !collapsed"
-        />
-      </a-layout-header>
-      <a-layout-content>
-        <news-list></news-list>
-      </a-layout-content>
-    </a-layout>
-  </a-layout>
+  <div style="height:100vh">
+    <vue-waterfall-easy
+      :imgWidth="400"
+      :maxCols="4"
+      :imgsArr="imgsArr"
+      @scrollReachBottom="fetchImgsData"
+      @click="showModal"
+    >
+      <div style="background-color:white" class="img-info" slot-scope="props">
+        <div style="margin:5px">
+          <span style="font-weight:bold;font-size:20px;color:black;">{{props.value.title}}</span>
+          <p style="color:grey">{{props.value.info}}</p>
+        </div>
+        <div style="text-align:right;margin-right:5px;">
+          <a-icon type="heart" @click="testFun"/>
+        </div>
+      </div>
+    </vue-waterfall-easy>
+    <a-modal style="top:8px" v-model="visible" @ok="handleOk" width="800px" :footer="null">
+      <div class="news-modal">
+        <p
+          style="margin-bottom:5px;font-size: 25px;color:black;
+  text-align: center;"
+        >{{news[index].TITLE}}</p>
+        <p style="font-size:16px;text-align:center">{{news[index].AUTHOR}}</p>
+
+        <hr style="margin:3px;">
+
+        <div style="font-size:17px;color:#0f0f0f; height:auto; ">
+          <p v-html="news[index].DESCRIPTION"></p>
+        </div>
+
+        <comment></comment>
+      </div>
+    </a-modal>
+  </div>
 </template>
 
 
 <script>
 import vueWaterfallEasy from "vue-waterfall-easy";
 import Comment from "./Comment";
-import NewsList from "./NewsList";
-
 export default {
-  name: "Home",
+  name: "NewsList",
   data() {
     return {
       index: 0,
@@ -53,8 +55,7 @@ export default {
   },
   components: {
     vueWaterfallEasy,
-    Comment,
-    NewsList,
+    Comment
   },
   methods: {
     testFun() {
@@ -110,24 +111,9 @@ export default {
 </script>
 
 <style scoped>
-#components-layout-demo-custom-trigger .trigger {
-  font-size: 18px;
-  line-height: 64px;
-  padding: 0 24px;
-  cursor: pointer;
-  transition: color 0.3s;
+a-layout-content {
+  height: "100vh";
 }
-
-#components-layout-demo-custom-trigger .trigger:hover {
-  color: #1890ff;
-}
-
-#components-layout-demo-custom-trigger .logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
-}
-
 .ant-modal-header .ant-modal-title {
   font-size: 25px;
   text-align: center;
