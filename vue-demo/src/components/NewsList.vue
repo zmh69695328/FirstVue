@@ -28,7 +28,7 @@
         <hr style="margin:3px;">
 
         <div style="font-size:17px;color:#0f0f0f; height:auto; ">
-          <p v-html="news[index].DESCRIPTION"></p>
+          <div style="height:auto;" v-html="news[index].DESCRIPTION"></div>
         </div>
 
         <comment></comment>
@@ -118,9 +118,12 @@ a-layout-content {
   font-size: 25px;
   text-align: center;
 }
-.ant-modal-body .news-modal div p div img {
+.vue-waterfall-easy .ant-modal-body .news-modal div p div img {
   height: auto;
   width: 100%;
   vertical-align: bottom;
+}
+.vue-waterfall-easy img {
+  height: auto;
 }
 </style>
