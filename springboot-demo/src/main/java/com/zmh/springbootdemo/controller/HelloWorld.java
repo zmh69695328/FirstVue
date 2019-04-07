@@ -27,7 +27,6 @@ public class HelloWorld {
     @CrossOrigin
     public String helloworld() {
         String rssUrl = "https://rsshub.app/thepaper/featured";
-        System.out.println("1111");
         List<RSSItemBean> rssList = getAllRssItemBeanList(rssUrl);
         // for (int i = 0; i < rssList.size(); i++) {
         // System.out.println(rssList.get(i).getDescription());
@@ -64,10 +63,8 @@ public class HelloWorld {
                 } else {
                     System.out.println("---------------------------------------------");
                     for (int i = idx, cnt = 0; i < tmp.length(); i++) {
-                        System.out.println(tmp.charAt(i));
                         if (tmp.charAt(i) == '"') {
                             if (cnt == 0) {
-
                                 st = i;
                                 cnt++;
                             } else if (cnt == 1) {
