@@ -1,13 +1,18 @@
 package com.zmh.springbootdemo.controller;
 
-import java.awt.List;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.zmh.springbootdemo.dao.*;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
+import com.zmh.springbootdemo.dao.Person;
+import com.zmh.springbootdemo.dao.RSSItemBean;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.MongoTransactionException;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.VariableOperators.Map;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -20,18 +25,75 @@ public class NewsList {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
     public void specialFieldQuery() {
         System.out.println("-------------");
         Query query = new Query(Criteria.where("id").is(11));
         // 查询一条满足条件的数据
 
-        Person result = mongoTemplate.findOne(query,Person.class,"test");
+        Person result = mongoTemplate.findOne(query, Person.class, "test");
         System.out.println("query: " + query + " | specialFieldQueryOne: " + result);
-        Person mgtest =new Person();
+        Person mgtest = new Person();
         mgtest.setId(11);
         mgtest.setAge(44);
         mgtest.setName("ceshi");
-        mongoTemplate.save(mgtest,"test");
-        
+        mongoTemplate.save(mgtest, "test");
+
+        String rssUrl = "https://rsshub.app/thepaper/featured";
+        List<RSSItemBean> rssList = getAllRssItemBeanList(rssUrl);
+        mongoTemplate.insertAll(rssList);
+    }
+
+    public List<RSSItemBean> getAllRssItemBeanList(String rssUrl) {
+        try {
+            System.setProperty("https.protocols", "TLSv1.2,TLSv1.1,SSLv3");
+            URL feedUrl = new URL(rssUrl);
+            SyndFeedInput input = new SyndFeedInput();
+            SyndFeed feed = input.build(new XmlReader(feedUrl));
+
+            List<SyndEntry> entries = feed.getEntries();
+
+            RSSItemBean item = null;
+            List<RSSItemBean> rssItemBeans = new ArrayList<RSSItemBean>();
+
+            for (SyndEntry entry : entries) {
+                item = new RSSItemBean();
+                String tmp = entry.getDescription().getValue();
+                int idx = tmp.indexOf("img src=");
+                int st = 0, ed = 0;
+                item.setDescription(tmp);
+                if (idx == -1) {
+                    item.setImg("");
+                } else {
+                    System.out.println("---------------------------------------------");
+                    for (int i = idx, cnt = 0; i < tmp.length(); i++) {
+                        if (tmp.charAt(i) == '"') {
+                            if (cnt == 0) {
+                                st = i;
+                                cnt++;
+                            } else if (cnt == 1) {
+                                ed = i;
+                                break;
+                            }
+                        }
+                    }
+                    item.setImg(tmp.substring(st + 1, ed));
+                }
+
+                item.setTitle(entry.getTitle().trim());
+                item.setType(feed.getTitleEx().getValue().trim());
+                item.setUri(entry.getUri());
+                item.setPubDate(entry.getPublishedDate());
+                item.setAuthor(entry.getAuthor());
+
+                rssItemBeans.add(item);
+            }
+            return rssItemBeans;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }
