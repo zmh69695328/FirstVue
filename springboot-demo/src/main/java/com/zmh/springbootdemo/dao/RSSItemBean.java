@@ -13,14 +13,15 @@ import lombok.Data;
 @Component
 @Data
 public class RSSItemBean {
+	@JSONField(name = "_ID")
+	private String _id;
 	@JSONField(name = "TITLE")
 	private String title;
 	@JSONField(name = "AUTHOR")
 	private String author;
 	@JSONField(name = "URI")
 	private String uri;
-	@JSONField(name = "LINK")
-	private String link;
+	private String info;
 	@JSONField(name = "DESCRIPTION")
 	private String description;
 	@JSONField(name = "PUBDATE")
@@ -32,16 +33,25 @@ public class RSSItemBean {
 	public RSSItemBean() {
 	}
 
-	public RSSItemBean(String title, String author, String uri, String link, String description, Date pubDate,
-			String type, String img) {
+	public RSSItemBean(String _id, String title, String author, String uri, String info, String description,
+			Date pubDate, String type, String img) {
+		this._id = _id;
 		this.title = title;
 		this.author = author;
 		this.uri = uri;
-		this.link = link;
+		this.info = info;
 		this.description = description;
 		this.pubDate = pubDate;
 		this.type = type;
 		this.img = img;
+	}
+
+	public String get_id() {
+		return this._id;
+	}
+
+	public void set_id(String _id) {
+		this._id = _id;
 	}
 
 	public String getTitle() {
@@ -68,12 +78,12 @@ public class RSSItemBean {
 		this.uri = uri;
 	}
 
-	public String getLink() {
-		return this.link;
+	public String getInfo() {
+		return this.info;
 	}
 
-	public void setLink(String link) {
-		this.link = link;
+	public void setInfo(String info) {
+		this.info = info;
 	}
 
 	public String getDescription() {
@@ -108,6 +118,11 @@ public class RSSItemBean {
 		this.img = img;
 	}
 
+	public RSSItemBean _id(String _id) {
+		this._id = _id;
+		return this;
+	}
+
 	public RSSItemBean title(String title) {
 		this.title = title;
 		return this;
@@ -123,8 +138,8 @@ public class RSSItemBean {
 		return this;
 	}
 
-	public RSSItemBean link(String link) {
-		this.link = link;
+	public RSSItemBean info(String info) {
+		this.info = info;
 		return this;
 	}
 
@@ -156,22 +171,23 @@ public class RSSItemBean {
 			return false;
 		}
 		RSSItemBean rSSItemBean = (RSSItemBean) o;
-		return Objects.equals(title, rSSItemBean.title) && Objects.equals(author, rSSItemBean.author)
-				&& Objects.equals(uri, rSSItemBean.uri) && Objects.equals(link, rSSItemBean.link)
-				&& Objects.equals(description, rSSItemBean.description) && Objects.equals(pubDate, rSSItemBean.pubDate)
-				&& Objects.equals(type, rSSItemBean.type) && Objects.equals(img, rSSItemBean.img);
+		return Objects.equals(_id, rSSItemBean._id) && Objects.equals(title, rSSItemBean.title)
+				&& Objects.equals(author, rSSItemBean.author) && Objects.equals(uri, rSSItemBean.uri)
+				&& Objects.equals(info, rSSItemBean.info) && Objects.equals(description, rSSItemBean.description)
+				&& Objects.equals(pubDate, rSSItemBean.pubDate) && Objects.equals(type, rSSItemBean.type)
+				&& Objects.equals(img, rSSItemBean.img);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(title, author, uri, link, description, pubDate, type, img);
+		return Objects.hash(title, author, uri);
 	}
 
 	@Override
 	public String toString() {
-		return "{" + " title='" + getTitle() + "'" + ", author='" + getAuthor() + "'" + ", uri='" + getUri() + "'"
-				+ ", link='" + getLink() + "'" + ", description='" + getDescription() + "'" + ", pubDate='"
-				+ getPubDate() + "'" + ", type='" + getType() + "'" + ", img='" + getImg() + "'" + "}";
+		return "{" + " _id='" + get_id() + "'" + ", title='" + getTitle() + "'" + ", author='" + getAuthor() + "'"
+				+ ", uri='" + getUri() + "'" + ", info='" + getInfo() + "'" + ", description='" + getDescription() + "'"
+				+ ", pubDate='" + getPubDate() + "'" + ", type='" + getType() + "'" + ", img='" + getImg() + "'" + "}";
 	}
 
 }

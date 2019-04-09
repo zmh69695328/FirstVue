@@ -1,41 +1,48 @@
 package com.zmh.springbootdemo.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.alibaba.fastjson.JSON;
 import com.rometools.rome.feed.synd.SyndEntry;
-import com.rometools.rome.feed.synd.SyndEntryImpl;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
-import com.zmh.springbootdemo.dao.*;
+import com.zmh.springbootdemo.dao.RSSItemBean;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.util.SocketUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloWorld {
+    private static final String COLLECTION_NAME = "rSSItemBean";
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @GetMapping("/news")
     @CrossOrigin
     public String helloworld() {
-        String rssUrl = "https://rsshub.app/thepaper/featured";
-        List<RSSItemBean> rssList = getAllRssItemBeanList(rssUrl);
+        // String rssUrl = "https://rsshub.app/thepaper/featured";
+        // List<RSSItemBean> rssList = getAllRssItemBeanList(rssUrl);
         // for (int i = 0; i < rssList.size(); i++) {
         // System.out.println(rssList.get(i).getDescription());
         // System.out.println("--------------------------------------------------------------------------");
 
         // }
 
+        List<RSSItemBean> rssList = mongoTemplate.findAll(RSSItemBean.class, COLLECTION_NAME);
+        Collections.reverse(rssList);
         String jsonOutput = JSON.toJSONString(rssList);
-        // System.out.println("22 " + jsonOutput);
+        // System.out.println("----------- \n" + jsonOutput);
 
         return jsonOutput;
     }
@@ -61,7 +68,7 @@ public class HelloWorld {
                 if (idx == -1) {
                     item.setImg("");
                 } else {
-                    System.out.println("---------------------------------------------");
+                    // System.out.println("---------------------------------------------");
                     for (int i = idx, cnt = 0; i < tmp.length(); i++) {
                         if (tmp.charAt(i) == '"') {
                             if (cnt == 0) {
@@ -81,7 +88,11 @@ public class HelloWorld {
                 item.setUri(entry.getUri());
                 item.setPubDate(entry.getPublishedDate());
                 item.setAuthor(entry.getAuthor());
-
+                String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+                Pattern p = Pattern.compile(regEx);
+                Matcher m = p.matcher(item.getDescription().substring(0, 50));
+                item.setImg(m.toString());
+                System.out.println("***---------\n" + item.getImg());
                 rssItemBeans.add(item);
             }
             return rssItemBeans;

@@ -19,12 +19,22 @@
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
+      <a-layout-header style="background: #fff; padding: 0" class="header">
         <a-icon
           class="trigger"
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
           @click="()=> collapsed = !collapsed"
         />
+        <a-icon
+          type="sync"
+          style="font-size:20px;"
+          @click="()=> collapsed = !collapsed"
+          :spin="flag"
+        />
+        <a-avatar
+          :size="62"
+          src="https://s.gravatar.com/avatar/7b3885009be8e0f49e1a8d4f145c5563?s=80"
+        ></a-avatar>
       </a-layout-header>
       <a-layout-content>
         <news-list></news-list>
@@ -38,11 +48,12 @@
 import vueWaterfallEasy from "vue-waterfall-easy";
 import Comment from "./Comment";
 import NewsList from "./NewsList";
-
+import Header from "./Header";
 export default {
   name: "Home",
   data() {
     return {
+      flag: true,
       index: 0,
       list: [],
       visible: false,
@@ -52,9 +63,10 @@ export default {
     };
   },
   components: {
+    Header,
     vueWaterfallEasy,
     Comment,
-    NewsList,
+    NewsList
   },
   methods: {
     testFun() {
