@@ -14,6 +14,19 @@ Vue.config.productionTip = false
 Vue.use(Antd);
 Vue.use(VueRouter);
 
+// http request 拦截器
+axios.interceptors.request.use(
+  config => {
+    if (localStorage.JWT_TOKEN) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
+      config.headers.Authorization = `token ${localStorage.JWT_TOKEN}`;
+    }
+    return config;
+  },
+  err => {
+    return Promise.reject(err);
+  });
+
+
 
 import NewsList from "./components/NewsList.vue";
 import Home from "./components/Home.vue";

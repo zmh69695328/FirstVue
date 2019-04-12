@@ -17,7 +17,14 @@
         </div>
       </div>
     </vue-waterfall-easy>
-    <a-modal style="top:8px" v-model="visible" @ok="handleOk" width="800px" :footer="null">
+    <a-modal
+      style="top:8px"
+      v-model="visible"
+      @ok="handleOk"
+      width="800px"
+      :footer="null"
+      :closable="false"
+    >
       <div class="news-modal">
         <p
           style="margin-bottom:5px;font-size: 25px;color:black;
