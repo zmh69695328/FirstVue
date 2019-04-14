@@ -6,15 +6,7 @@
     </div>
     <p v-else class="login" @click="showModal">登录</p>
 
-    <a-modal
-      :closable="false"
-      title="~~~欢迎~~~"
-      v-model="visible"
-      @ok="handleOk"
-      okText="登录"
-      cancelText="注册"
-      @cancel="changetoregister($event)"
-    >
+    <a-modal :closable="false" title="~~~欢迎~~~" v-model="visible" :footer="null">
       <div v-if="flag_register">
         <a-input placeholder="用户名" v-model="input_val[0]">
           <a-icon slot="prefix" type="user"/>
@@ -34,13 +26,17 @@
           <a-icon slot="prefix" type="key"/>
         </a-input>
         <a-input
-          v-for="(i,index) in input_en.slice(3)"
+          v-for="(i,index) in input_en.slice(2)"
           :key="i"
-          :placeholder="input_ch[index+3]"
-          v-model="input_val[index+3]"
+          :placeholder="input_ch[index+2]"
+          v-model="input_val[index+2]"
         >
           <a-icon slot="prefix" type="edit"/>
         </a-input>
+      </div>
+      <div class="modal_button">
+        <a-button @click="changetoregister">注册</a-button>
+        <a-button type="primary" @click="handleOk">确定</a-button>
       </div>
     </a-modal>
   </div>
@@ -67,14 +63,9 @@ export default {
     this.haslogin();
   },
   methods: {
-    changetoregister(event) {
-      console.log(
-        "-----------------------------------------------------------------"
-      );
-      //event.defaultPrevented();
-
-      console.log(event);
-      this.flag_register = false;
+    changetoregister() {
+      this.flag_register = !this.flag_register;
+      for (let i in this.input_val) this.input_val[i] = "";
     },
     haslogin() {
       if (localStorage.JWT_TOKEN) {
@@ -87,18 +78,36 @@ export default {
       this.visible = true;
     },
     handleOk(e) {
-      console.log(this.input_val);
-      let tmp = {};
-      tmp["username"] = this.input_val[0];
-      tmp["password"] = this.input_val[1];
+      console.log("------");
+      if (this.flag_register == true) {
+        let tmp = {};
+        tmp["username"] = this.input_val[0];
+        tmp["password"] = this.input_val[1];
 
-      this.axios.post("/login", tmp).then(response => {
-        if (response.data.ok == true) {
-          this.visible = false;
-        } else {
-          this.$message.error("登陆失败");
+        this.axios.post("/login", tmp).then(response => {
+          console.log(response);
+          if (response.data.status == true) {
+            localStorage.setItem("JWT_TOKEN", response.data.JWT_TOKEN);
+            this.visible = false;
+            this.flag = true;
+            this.$message.success("登录成功");
+          } else {
+            this.$message.error("登陆失败");
+          }
+        });
+      } else {
+        let tmp = {};
+        console.log("----------------------------------------------");
+        for (let i in this.input_en) {
+          tmp[this.input_en[i]] = this.input_val[i];
         }
-      });
+        console.log(tmp);
+        this.axios.post("/register", tmp).then(response => {
+          console.log(response);
+          this.$message.success("注册成功");
+          this.flag_register = true;
+        });
+      }
     }
   }
 };
@@ -110,6 +119,12 @@ export default {
 }
 .ant-input-affix-wrapper {
   margin: 10px;
+}
+.modal_button .ant-btn {
+  margin: 3px;
+}
+.modal_button {
+  text-align: right;
 }
 </style>
 

@@ -29,18 +29,16 @@
           <a-switch></a-switch>
         </div>
 
+        <Search></Search>
+
         <div class="userheader">
           <a-icon type="sync" @click="refresh" :spin="flag"/>
-
-          <a-popover title="熟睡的哲学家" placement="bottom">
+          <a-icon type="plus"/>
+          <a-popover :title="user.username" placement="bottom">
             <template slot="content">
               <login></login>
             </template>
-            <a-avatar
-              style="text-align:right;"
-              :size="60"
-              src="https://s.gravatar.com/avatar/7b3885009be8e0f49e1a8d4f145c5563?s=80"
-            ></a-avatar>
+            <a-avatar style="text-align:right;" :size="60" :src="user.avatar"></a-avatar>
           </a-popover>
         </div>
       </a-layout-header>
@@ -82,8 +80,7 @@
           >
             <div class="news-modal">
               <p
-                style="margin-bottom:5px;font-size: 25px;color:black;
-  text-align: center;"
+                style="margin-bottom:5px;font-size: 25px;color:black;text-align: center;"
               >{{news[index].TITLE}}</p>
               <p style="font-size:16px;text-align:center">{{news[index].AUTHOR}}</p>
 
@@ -107,13 +104,15 @@
 import vueWaterfallEasy from "vue-waterfall-easy";
 import Comment from "./Comment";
 import Login from "./Login";
+import Search from "./Search";
 export default {
   name: "Home",
   data() {
     return {
+      user: {},
       tag_visible: false,
       flag: false,
-      getnum: 8,
+      getnum: 10,
       news: [],
       index: 0,
       list: [],
@@ -126,14 +125,30 @@ export default {
   components: {
     vueWaterfallEasy,
     Comment,
-    Login
+    Login,
+    Search
   },
   methods: {
     recommend1() {},
     recommend2() {},
     recommend3() {},
-    testFun() {
-      console.log("------------------------------------------");
+    testFun() {},
+    getUser() {
+      if (localStorage.JWT_TOKEN) {
+        this.axios
+          .get("/information")
+          .then(response => {
+            this.user = response.data;
+            console.log("------------------------------------------");
+            console.log(this.user);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      } else {
+        this.user["username"] = "未登录";
+        this.user["avatar"] = "../assets/1.png";
+      }
     },
     showModal(event, { index, value }) {
       // console.log("visible");
@@ -190,14 +205,15 @@ export default {
         });
     }
   },
-
   created() {
     this.initList();
-  }
+    this.getUser();
+  },
+  mounted() {}
 };
 </script>
 
-<style scoped>
+<style >
 .ant-layout-header .userheader {
   float: right;
   margin-right: 20px;
@@ -240,6 +256,6 @@ export default {
   font-size: 20px;
   font-weight: bold;
   color: black;
-  margin-right: 8px;
+  margin-right: 20px;
 }
 </style>

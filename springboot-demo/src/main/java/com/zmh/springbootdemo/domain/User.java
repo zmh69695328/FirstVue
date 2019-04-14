@@ -12,8 +12,6 @@ public class User {
     private String sex;
     private String avatar;
 
-}
-
     public User() {
     }
 
@@ -149,19 +147,14 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, email, age, profession, sex, avatar);
+        return Objects.hash(username);
     }
 
     @Override
     public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", username='" + getUsername() + "'" +
-            ", password='" + getPassword() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", age='" + getAge() + "'" +
-            ", profession='" + getProfession() + "'" +
-            ", sex='" + getSex() + "'" +
-            ", avatar='" + getAvatar() + "'" +
-            "}";
+        return "{" + " id='" + getId() + "'" + ", username='" + getUsername() + "'" + ", password='" + getPassword()
+                + "'" + ", email='" + getEmail() + "'" + ", age='" + getAge() + "'" + ", profession='" + getProfession()
+                + "'" + ", sex='" + getSex() + "'" + ", avatar='" + getAvatar() + "'" + "}";
     }
+
+}

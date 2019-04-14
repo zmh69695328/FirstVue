@@ -5,11 +5,6 @@ import java.util.Objects;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-import lombok.*;
-
-@Setter
-@Getter
-@ToString
 public class Person {
     private int id;
     private int age;
@@ -81,10 +76,6 @@ public class Person {
 
     @Override
     public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", age='" + getAge() + "'" +
-            ", name='" + getName() + "'" +
-            "}";
+        return "{" + " id='" + getId() + "'" + ", age='" + getAge() + "'" + ", name='" + getName() + "'" + "}";
     }
 }

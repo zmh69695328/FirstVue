@@ -8,10 +8,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import lombok.Data;
-
 @Component
-@Data
 public class RSSItemBean {
 	@JSONField(name = "_ID")
 	private String _id;

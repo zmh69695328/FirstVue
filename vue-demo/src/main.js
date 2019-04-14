@@ -6,6 +6,7 @@ Vue.config.productionTip = false
 Vue.prototype.axios = axios
 axios.defaults.withCredentials = false
 axios.defaults.baseURL = 'http://localhost:8081'
+
 import VueRouter from 'vue-router'
 
 import Antd from 'ant-design-vue'
@@ -18,7 +19,7 @@ Vue.use(VueRouter);
 axios.interceptors.request.use(
   config => {
     if (localStorage.JWT_TOKEN) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-      config.headers.Authorization = `token ${localStorage.JWT_TOKEN}`;
+      config.headers.Authorization = `${localStorage.JWT_TOKEN}`;
     }
     return config;
   },
@@ -27,12 +28,9 @@ axios.interceptors.request.use(
   });
 
 
-
-import NewsList from "./components/NewsList.vue";
 import Home from "./components/Home.vue";
 import Test from "./components/Test.vue"
 const routes = [
-  { path: '/newslist', component: NewsList },
   { path: '/home', component: Home },
   { path: '/Test', component: Test }
 ]
