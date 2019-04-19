@@ -5,7 +5,7 @@
         <a-icon type="code-sandbox" style="font-size:50px;margin-right:15px;"/>
 
         <a-dropdown>
-          <a class="ant-dropdown-link" href="#">
+          <a class="ant-dropdown-link" href="http://localhost:8080/#/home">
             首页
             <a-icon type="down"/>
           </a>
@@ -29,14 +29,44 @@
           <a-switch></a-switch>
         </div>
 
-        <Search></Search>
+        <Search :title="title"></Search>
 
         <div class="userheader">
           <a-icon type="sync" @click="refresh" :spin="flag"/>
-          <a-icon type="plus"/>
+          <a-icon type="plus" @click="showDrawer"/>
+          <a-drawer
+            title="我的订阅"
+            placement="right"
+            :closable="false"
+            @close="onClose"
+            :visible="visible_plus"
+          >
+            <a-input-group compact class="rsshub">
+              <span>订阅名称</span>
+              <a-auto-complete :dataSource="datasource1" @select="onselect1" v-model="rsshub_name"/>
+              <br>
+              <span>订阅地址</span>
+
+              <a-auto-complete :dataSource="datasource2" @select="onselect2" v-model="rsshub_url"/>
+              <a-button type="primary" block @click="addurl">添加</a-button>
+
+              <a-divider orientation="left">点击下方标签删除</a-divider>
+              <a-popconfirm
+                title="删除?"
+                @confirm="deleteurl(i.name,i.url)"
+                okText="确定"
+                cancelText="取消"
+                v-for="i in rsshub"
+                :key="i.name"
+              >
+                <a-tag>{{i.name}}</a-tag>
+              </a-popconfirm>
+            </a-input-group>
+          </a-drawer>
+
           <a-popover :title="user.username" placement="bottom">
             <template slot="content">
-              <login></login>
+              <login @update="getUser"></login>
             </template>
             <a-avatar style="text-align:right;" :size="60" :src="user.avatar"></a-avatar>
           </a-popover>
@@ -62,11 +92,15 @@
                 <a-tag color="pink">Tag 1</a-tag>
                 <a-tag color="pink">Tag 1</a-tag>
 
-                <a-popover title="1111" trigger="click" v-model="tag_visible">
-                  <a slot="content">Close</a>
+                <a-popover trigger="click" v-model="tag_visible[props.index]">
+                  <a @click="deletenews(props.index)" slot="content">删除</a>
                   <a-icon type="ellipsis"/>
                 </a-popover>
-                <a-icon type="heart" @click="testFun"/>
+                <a-icon
+                  :theme.sync="click_themeA[props.index]"
+                  type="heart"
+                  @click="testFun(props.index)"
+                />
               </div>
             </div>
           </vue-waterfall-easy>
@@ -105,21 +139,33 @@ import vueWaterfallEasy from "vue-waterfall-easy";
 import Comment from "./Comment";
 import Login from "./Login";
 import Search from "./Search";
+import Vue from "vue";
 export default {
   name: "Home",
   data() {
     return {
+      click_themeA: [],
+      datasource2: [
+        "https://rsshub.app/cctv/china",
+        "https://rsshub.app/juejin/category/frontend"
+      ],
+      datasource1: ["央视新闻", "掘金前端"],
       user: {},
-      tag_visible: false,
+      tag_visible: [],
       flag: false,
       getnum: 10,
       news: [],
+      title: [],
       index: 0,
       list: [],
       visible: false,
       collapsed: false,
       imgsArr: [], //存放所有已加载图片的数组（即当前页面会加载的所有图片）
-      fetchImgsArr: [] //存放每次滚动时下一批要加载的图片的数组
+      fetchImgsArr: [], //存放每次滚动时下一批要加载的图片的数组
+      visible_plus: false,
+      rsshub: [],
+      rsshub_name: "",
+      rsshub_url: ""
     };
   },
   components: {
@@ -129,17 +175,38 @@ export default {
     Search
   },
   methods: {
+    onselect1(value) {
+      let i = this.datasource1.indexOf(value);
+      this.rsshub_url = this.datasource2[i];
+    },
+    onselect2(value) {
+      let i = this.datasource2.indexOf(value);
+      this.rsshub_url = this.datasource1[i];
+    },
+    showDrawer() {
+      this.getRSShub();
+      this.visible_plus = true;
+    },
+    onClose() {
+      this.visible_plus = false;
+    },
     recommend1() {},
     recommend2() {},
     recommend3() {},
-    testFun() {},
+    testFun(index) {
+      if (this.click_themeA[index] == "filled")
+        Vue.set(this.click_themeA, index, "outlined");
+      else Vue.set(this.click_themeA, index, "filled");
+    },
     getUser() {
       if (localStorage.JWT_TOKEN) {
         this.axios
           .get("/information")
           .then(response => {
             this.user = response.data;
-            console.log("------------------------------------------");
+            console.log("++++++++++++++");
+            console.log(response.data);
+            Vue.set(this.user, "avatar", response.data.avatar);
             console.log(this.user);
           })
           .catch(function(error) {
@@ -185,6 +252,11 @@ export default {
         .get("/news")
         .then(response => {
           this.news = response.data;
+          for (let i in this.news) {
+            console.log("---------------");
+            this.title.push(this.news[i].TITLE);
+            this.click_themeA[i] = "outlined";
+          }
           console.log(this.news);
           this.imgsArr = this.initImgsArr(0, this.getnum); //初始化第一次（即页面加载完毕时）要加载的图片数据
         })
@@ -203,6 +275,42 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    },
+    getRSShub() {
+      this.axios
+        .get("/get/rss")
+        .then(response => {
+          this.rsshub = response.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    addurl() {
+      this.axios
+        .post("/post/rss", { name: this.rsshub_name, url: this.rsshub_url })
+        .then(response => {
+          this.rsshub.push(response.data);
+          this.rsshub_name = this.rsshub_url = "";
+          console.log("=============");
+          console.log(this.rsshub);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    deleteurl(name1, url1) {
+      this.axios
+        .post("/delete/rss", { name: name1, url: url1 })
+        .then(response => {
+          this.getRSShub();
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    deletenews(index) {
+      this.imgsArr.splice(index, 1);
     }
   },
   created() {
@@ -257,5 +365,19 @@ export default {
   font-weight: bold;
   color: black;
   margin-right: 20px;
+}
+.rsshub span {
+  font-size: 15px;
+  margin: 5px;
+}
+.rsshub .ant-btn {
+  margin-top: 10px;
+}
+.rsshub .ant-tag {
+  margin-left: 6px;
+  margin-top: 5px;
+  font-weight: bold;
+}
+.rsshub .ant-select-auto-complete {
 }
 </style>

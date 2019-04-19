@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <a-auto-complete
-      :dataSource="dataSource"
+      :dataSource="title"
       style="width: 200px"
       placeholder="  搜索"
       :filterOption="filterOption"
@@ -15,9 +15,15 @@
 <script>
 export default {
   name: "search",
+  props: ["title"],
   data() {
     return {
-      dataSource: ["Burns Bay Road", "Downing Street", "Wall Street"]
+      dataSource: [
+        "Burns Bay Road",
+        "Downing Street",
+        "Wall Street",
+        "Wall Street"
+      ]
     };
   },
   methods: {

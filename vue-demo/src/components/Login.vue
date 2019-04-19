@@ -2,7 +2,7 @@
   <div>
     <div v-if="flag">
       <user></user>
-      <p class="login" @click="showModal">注销</p>
+      <p class="login" @click="logout">注销</p>
     </div>
     <p v-else class="login" @click="showModal">登录</p>
 
@@ -90,6 +90,7 @@ export default {
             localStorage.setItem("JWT_TOKEN", response.data.JWT_TOKEN);
             this.visible = false;
             this.flag = true;
+            this.$emit("update");
             this.$message.success("登录成功");
           } else {
             this.$message.error("登陆失败");
@@ -108,6 +109,12 @@ export default {
           this.flag_register = true;
         });
       }
+    },
+    logout() {
+      localStorage.removeItem("JWT_TOKEN");
+      this.flag = false;
+      this.$emit("update");
+      this.$message.success("注销成功");
     }
   }
 };

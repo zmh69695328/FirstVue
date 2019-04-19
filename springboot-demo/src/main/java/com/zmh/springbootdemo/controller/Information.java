@@ -23,8 +23,8 @@ public class Information {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    @GetMapping("/information")
     @CrossOrigin
+    @GetMapping("/information")
     public String test() {
         String JWT_TOKEN = request.getHeader("Authorization");
         String username = JWTUtil.getUsername(JWT_TOKEN);
