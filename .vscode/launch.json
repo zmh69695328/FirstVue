@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "CodeLens (Launch) - ClassifyTest",
+            "request": "launch",
+            "mainClass": "com.fmyblack.ClassifyTest",
+            "projectName": "springboot-demo"
+        },
+        {
             "type": "chrome",
             "request": "attach",
             "name": "Attach to Chrome",
