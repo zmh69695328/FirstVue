@@ -8,11 +8,11 @@ import com.fmyblack.textClassify.doc.TFDocIterable;
 
 public class Tag {
 
-	String				name;
-	TFDocIterable		docs		= null;
-	int					idfPower	= 3;
-	Map<String, Double>	wordsProbility;
-	int					totalWordsNum;
+	String name;
+	TFDocIterable docs = null;
+	int idfPower = 3;
+	Map<String, Double> wordsProbility;
+	int totalWordsNum;
 
 	public Tag(String name, TFDocIterable docs) {
 		this.name = name;

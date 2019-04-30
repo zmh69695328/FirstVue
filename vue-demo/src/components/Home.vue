@@ -124,7 +124,7 @@
                 <div style="height:auto;" v-html="news[index].DESCRIPTION"></div>
               </div>
 
-              <comment></comment>
+              <comment ref="mycomment" :user="user" :id="news[index]._ID"></comment>
             </div>
           </a-modal>
         </div>
@@ -218,13 +218,13 @@ export default {
       }
     },
     showModal(event, { index, value }) {
-      // console.log("visible");
-      this.visible = true;
-      console.log(index);
+      setTimeout(() => {
+        this.$refs.mycomment.myclick();
+      }, 100);
       this.index = index;
+      this.visible = true;
     },
     handleOk(e) {
-      console.log(e);
       this.visible = false;
     },
     initImgsArr(n, m) {

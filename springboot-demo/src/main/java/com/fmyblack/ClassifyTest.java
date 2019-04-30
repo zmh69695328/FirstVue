@@ -22,7 +22,7 @@ public class ClassifyTest {
 		System.out.println(userDirPath);
 		String seedsDir = userDirPath + File.separator + "seeds";
 		System.out.println(seedsDir);
-		double trainDataPercent = 0.99;
+		double trainDataPercent = 0.9999;
 		Tuple2<Map<String, List<String>>, Map<String, List<String>>> trainAndtestSeeds = divideSeedsToTrainAndTest(
 				seedsDir, trainDataPercent);
 		Map<String, List<String>> trainSeeds = trainAndtestSeeds._1();
@@ -49,6 +49,7 @@ public class ClassifyTest {
 		for (Map.Entry<String, List<String>> entry : testSeeds.entrySet()) {
 			String tag = entry.getKey();
 			for (String docPath : entry.getValue()) {
+				//1
 				Result result = cModel.classify(docPath);
 				System.out.println(tag + "\t" + result.toString());
 				if (tag.equals(result.getTag())) {

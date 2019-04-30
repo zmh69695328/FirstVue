@@ -25,8 +25,6 @@ public class Login {
     @CrossOrigin
     @PostMapping("/login")
     public String handle(@RequestBody User user) {
-        System.out.println("---------------------------");
-        System.out.println(user.getUsername() + " ----------" + user.getPassword());
         Map<String, Object> res = new HashMap<>();
         String username = user.getUsername();
         Query query = new Query(Criteria.where("username").is(username));// 可累加条件

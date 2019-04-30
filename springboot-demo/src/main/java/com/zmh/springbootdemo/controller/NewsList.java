@@ -55,7 +55,6 @@ public class NewsList {
                 if (idx == -1) {
                     item.setImg("");
                 } else {
-                    System.out.println("---------------------------------------------");
                     for (int i = idx, cnt = 0; i < tmp.length(); i++) {
                         if (tmp.charAt(i) == '"') {
                             if (cnt == 0) {

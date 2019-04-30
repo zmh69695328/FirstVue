@@ -28,11 +28,10 @@ public class Information {
     public String test() {
         String JWT_TOKEN = request.getHeader("Authorization");
         String username = JWTUtil.getUsername(JWT_TOKEN);
-        System.out.println("-------------------------------------");
-        System.out.println(JWT_TOKEN + "\n" + username);
+
         Query query = new Query(Criteria.where("username").is(username));// 可累加条件
         User tmp = mongoTemplate.findOne(query, User.class, "User");
-        System.out.println(tmp.toString());
+
         return JSON.toJSONString(tmp);
     }
 

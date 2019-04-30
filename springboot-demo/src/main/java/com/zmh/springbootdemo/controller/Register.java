@@ -18,7 +18,6 @@ public class Register {
     @CrossOrigin
     @PostMapping("/register")
     public String handle(@RequestBody User user) {
-        System.out.println("---------------------------");
         String avatarul = "https://s.gravatar.com/avatar/";
         avatarul += MD5Util.md5Hex(user.getEmail());
         avatarul += "?s=80";

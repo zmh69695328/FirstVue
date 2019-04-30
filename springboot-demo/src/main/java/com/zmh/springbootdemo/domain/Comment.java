@@ -5,17 +5,19 @@ import java.util.Objects;
 public class Comment {
     private String content;
     private String username;
-    private String news;
-    private String response;
+    private String newsid;// id
+    private String avatar;
+    private String datetime;
 
     public Comment() {
     }
 
-    public Comment(String content, String username, String news, String response) {
+    public Comment(String content, String username, String newsid, String avatar, String datetime) {
         this.content = content;
         this.username = username;
-        this.news = news;
-        this.response = response;
+        this.newsid = newsid;
+        this.avatar = avatar;
+        this.datetime = datetime;
     }
 
     public String getContent() {
@@ -34,20 +36,28 @@ public class Comment {
         this.username = username;
     }
 
-    public String getNews() {
-        return this.news;
+    public String getNewsid() {
+        return this.newsid;
     }
 
-    public void setNews(String news) {
-        this.news = news;
+    public void setNewsid(String newsid) {
+        this.newsid = newsid;
     }
 
-    public String getResponse() {
-        return this.response;
+    public String getAvatar() {
+        return this.avatar;
     }
 
-    public void setResponse(String response) {
-        this.response = response;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getDatetime() {
+        return this.datetime;
+    }
+
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
     }
 
     public Comment content(String content) {
@@ -60,13 +70,18 @@ public class Comment {
         return this;
     }
 
-    public Comment news(String news) {
-        this.news = news;
+    public Comment newsid(String newsid) {
+        this.newsid = newsid;
         return this;
     }
 
-    public Comment response(String response) {
-        this.response = response;
+    public Comment avatar(String avatar) {
+        this.avatar = avatar;
+        return this;
+    }
+
+    public Comment datetime(String datetime) {
+        this.datetime = datetime;
         return this;
     }
 
@@ -79,18 +94,19 @@ public class Comment {
         }
         Comment comment = (Comment) o;
         return Objects.equals(content, comment.content) && Objects.equals(username, comment.username)
-                && Objects.equals(news, comment.news) && Objects.equals(response, comment.response);
+                && Objects.equals(newsid, comment.newsid) && Objects.equals(avatar, comment.avatar)
+                && Objects.equals(datetime, comment.datetime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(content, username, news, response);
+        return Objects.hash(content, username, newsid, avatar, datetime);
     }
 
     @Override
     public String toString() {
-        return "{" + " content='" + getContent() + "'" + ", username='" + getUsername() + "'" + ", news='" + getNews()
-                + "'" + ", response='" + getResponse() + "'" + "}";
+        return "{" + " content='" + getContent() + "'" + ", username='" + getUsername() + "'" + ", newsid='"
+                + getNewsid() + "'" + ", avatar='" + getAvatar() + "'" + ", datetime='" + getDatetime() + "'" + "}";
     }
 
 }
