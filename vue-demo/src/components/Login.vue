@@ -91,7 +91,11 @@ export default {
             this.visible = false;
             this.flag = true;
             this.$emit("update");
+
             this.$message.success("登录成功");
+            setTimeout(() => {
+              location.reload();
+            }, 600);
           } else {
             this.$message.error("登陆失败");
           }

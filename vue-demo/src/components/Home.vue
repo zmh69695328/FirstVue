@@ -11,10 +11,10 @@
           </a>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a href="javascript:;">我的收藏</a>
+              <a @click="favorite">我的收藏</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;">浏览历史</a>
+              <a @click="history">浏览历史</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
@@ -25,7 +25,7 @@
           <a-switch></a-switch>
           <span>协同过滤</span>
           <a-switch></a-switch>
-          <span>关联规则</span>
+          <span>热点推荐</span>
           <a-switch></a-switch>
         </div>
 
@@ -88,9 +88,9 @@
               </div>
               <div class="my-tag">
                 <a-tag color="pink">Tag 1</a-tag>
-                <a-tag color="pink">Tag 1</a-tag>
-                <a-tag color="pink">Tag 1</a-tag>
-                <a-tag color="pink">Tag 1</a-tag>
+                <a-tag color="blue">Tag 1</a-tag>
+                <a-tag color="black">Tag 1</a-tag>
+                <a-tag color="green">Tag 1</a-tag>
 
                 <a-popover trigger="click" v-model="tag_visible[props.index]">
                   <a @click="deletenews(props.index)" slot="content">删除</a>
@@ -194,9 +194,17 @@ export default {
     recommend2() {},
     recommend3() {},
     testFun(index) {
-      if (this.click_themeA[index] == "filled")
+      if (this.click_themeA[index] == "filled") {
         Vue.set(this.click_themeA, index, "outlined");
-      else Vue.set(this.click_themeA, index, "filled");
+        this.axios
+          .post("/delete/favorite", { newsid: index })
+          .then(response => {});
+      } else {
+        Vue.set(this.click_themeA, index, "filled");
+        this.axios
+          .post("/add/favorite", { newsid: index })
+          .then(response => {});
+      }
     },
     getUser() {
       if (localStorage.JWT_TOKEN) {
@@ -204,9 +212,7 @@ export default {
           .get("/information")
           .then(response => {
             this.user = response.data;
-            console.log("++++++++++++++");
-            console.log(response.data);
-            Vue.set(this.user, "avatar", response.data.avatar);
+            //Vue.set(this.user, "avatar", response.data.avatar);
             console.log(this.user);
           })
           .catch(function(error) {
@@ -216,6 +222,12 @@ export default {
         this.user["username"] = "未登录";
         this.user["avatar"] = "../assets/1.png";
       }
+    },
+    getImg() {
+      //  this.axios.get(this.user.avatar).then(response =>{
+      //    console.log("get  ------"+response.data);
+      //    retrun response.data;
+      //  })
     },
     showModal(event, { index, value }) {
       setTimeout(() => {

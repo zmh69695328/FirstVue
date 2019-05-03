@@ -1,5 +1,1 @@
-Post http://localhost:8081/login 
-{
-    password:"sdfasdf",
-    username:"233333"
-}
+GET https://s.gravatar.com/avatar/7b3885009be8e0f49e1a8d4f145c5563?s=80
