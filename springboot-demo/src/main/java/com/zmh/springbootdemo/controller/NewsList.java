@@ -11,9 +11,12 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import com.zmh.springbootdemo.dao.RSSItemBean;
+import com.zmh.springbootdemo.domain.RSShub;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,13 +28,18 @@ public class NewsList {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public void specialFieldQuery() {
+    public void specialFieldQuery(String username) {
         String rssUrl = "https://rsshub.app/thepaper/featured";
         List<RSSItemBean> rssList = getAllRssItemBeanList(rssUrl);
-        // mongoTemplate.insertAll(rssList);
+        Query query = new Query(Criteria.where("username").is(username));// 可累加条件
+        for (RSShub a : mongoTemplate.find(query, RSShub.class, "RSShub")) {
+            // mongoTemplate.insertAll(rssList);
+            rssList.addAll(getAllRssItemBeanList(a.getUrl()));
+        }
         for (RSSItemBean tmp : rssList) {
             mongoTemplate.save(tmp, collectionName);
         }
+
     }
 
     public List<RSSItemBean> getAllRssItemBeanList(String rssUrl) {

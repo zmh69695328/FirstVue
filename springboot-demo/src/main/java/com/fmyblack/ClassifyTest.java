@@ -33,7 +33,7 @@ public class ClassifyTest {
 		// ClassifyModel cModel = cf.getClassifyModel("cosine", "mm");
 
 		// System.out.println(trainSeeds.toString());
-		// System.out.println(testSeeds.toString());
+	    //System.out.println(testSeeds.toString());
 		long start = System.currentTimeMillis();
 		cModel.train(trainSeeds);
 		long trainEnd = System.currentTimeMillis();
@@ -43,15 +43,19 @@ public class ClassifyTest {
 		System.out.println("分类耗时:\t" + (classifyEnd - trainEnd) + "ms");
 	}
 
+	public static void specify(String text) {
+
+	}
+
 	public static void testAccuracy(ClassifyModel cModel, Map<String, List<String>> testSeeds) {
 		int right = 0;
 		int all = 0;
 		for (Map.Entry<String, List<String>> entry : testSeeds.entrySet()) {
 			String tag = entry.getKey();
 			for (String docPath : entry.getValue()) {
-				//1
+				// 1
 				Result result = cModel.classify(docPath);
-				System.out.println(tag + "\t" + result.toString());
+				//System.out.println(tag + "\t" + result.toString());
 				if (tag.equals(result.getTag())) {
 					right++;
 				}

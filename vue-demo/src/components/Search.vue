@@ -5,6 +5,7 @@
       style="width: 200px"
       placeholder="  搜索"
       :filterOption="filterOption"
+      @select="show"
     >
       <a-input>
         <a-icon slot="suffix" type="search"/>
@@ -33,6 +34,10 @@ export default {
           .toUpperCase()
           .indexOf(input.toUpperCase()) >= 0
       );
+    },
+    show(value, open) {
+      //this.$message.success(value + open);
+      this.$emit("show", value);
     }
   }
 };

@@ -66,9 +66,6 @@ export default {
       this.axios
         .post("/get/comment", { id: this.id })
         .then(response => {
-          console.log("id--------------------------------");
-          console.log(this.id);
-          console.log(response.data);
           this.comments = response.data;
         })
         .catch(function(error) {
@@ -85,7 +82,6 @@ export default {
           newsid: this.id
         })
         .then(response => {
-          console.log("--------post-----------");
           this.value = "";
           this.getComment();
         })

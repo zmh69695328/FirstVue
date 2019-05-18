@@ -31,16 +31,8 @@ public class HelloWorld {
     @GetMapping("/news")
     @CrossOrigin
     public String helloworld() {
-        // String rssUrl = "https://rsshub.app/thepaper/featured";
-        // List<RSSItemBean> rssList = getAllRssItemBeanList(rssUrl);
-        // for (int i = 0; i < rssList.size(); i++) {
-        // System.out.println(rssList.get(i).getDescription());
-        // System.out.println("--------------------------------------------------------------------------");
-
-        // }
-
         List<RSSItemBean> rssList = mongoTemplate.findAll(RSSItemBean.class, COLLECTION_NAME);
-        Collections.reverse(rssList);
+        Collections.shuffle(rssList);
         String jsonOutput = JSON.toJSONString(rssList);
         // System.out.println("----------- \n" + jsonOutput);
 

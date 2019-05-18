@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="login" @click="showModal">个人中心</p>
-    <a-modal title="Basic Modal" v-model="visible" @ok="handleOk" :footer="null" width="1200px">
+    <a-modal title="个人中心" v-model="visible" @ok="handleOk" :footer="null" width="1200px">
       <a-divider orientation="left">个人信息</a-divider>
       <v-for></v-for>
       <a-divider orientation="left">订阅</a-divider>

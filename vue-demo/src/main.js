@@ -29,10 +29,13 @@ axios.interceptors.request.use(
 
 
 import Home from "./components/Home.vue";
-import Test from "./components/Test.vue"
+import Test from "./components/Test.vue";
+import Collection from "./components/Collection.vue";
+
 const routes = [
   { path: '/home', component: Home },
-  { path: '/Test', component: Test }
+  { path: '/Test', component: Test },
+  { path:'/collection',component:Collection},
 ]
 
 const router = new VueRouter({

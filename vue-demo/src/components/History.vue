@@ -6,12 +6,12 @@
 
         <a-dropdown>
           <a class="ant-dropdown-link">
-            <router-link to="/home">首页</router-link>
+            <router-link to="/collection">我的收藏</router-link>
             <a-icon type="down"/>
           </a>
           <a-menu slot="overlay">
             <a-menu-item>
-              <router-link to="/collection">我的收藏</router-link>
+              <router-link to="/home">首页</router-link>
             </a-menu-item>
             <a-menu-item>
               <router-link to="/history">历史记录</router-link>
@@ -74,44 +74,7 @@
       </a-layout-header>
       <a-layout-content>
         <div style="height:100vh">
-          <vue-waterfall-easy
-            v-show="refreshflag==true"
-            :imgWidth="400"
-            :maxCols="4"
-            :imgsArr="imgsArr"
-            @scrollReachBottom="fetchImgsData"
-            @click="showModal"
-          >
-            <div style="background-color:white" class="img-info" slot-scope="props">
-              <div style="margin:5px">
-                <span style="font-weight:bold;font-size:20px;color:black;">{{props.value.title}}</span>
-                <p style="color:grey">{{props.value.info}}</p>
-              </div>
-              <div class="my-tag">
-                <a-tag color="pink">{{props.value.type}}</a-tag>
-                <a-tag color="blue">Tag 1</a-tag>
-                <a-tag color="black">Tag 1</a-tag>
-                <a-tag color="green">Tag 1</a-tag>
-                <a-popover trigger="click" v-model="tag_visible[props.index]">
-                  <a @click="deletenews(props.index)" slot="content">不感兴趣</a>
-                  <a-icon type="ellipsis"/>
-                </a-popover>
-                <a-icon
-                  :theme.sync="click_themeA[props.index]"
-                  type="heart"
-                  @click="testFun(props.index,props.value._ID)"
-                />
-              </div>
-            </div>
-          </vue-waterfall-easy>
-
-          <vue-waterfall-easy
-            v-show="refreshflag==false"
-            :imgWidth="400"
-            :maxCols="4"
-            :imgsArr="imgsArr"
-            @click="showModal"
-          >
+          <vue-waterfall-easy :imgWidth="400" :maxCols="4" :imgsArr="imgsArr" @click="showModal">
             <div style="background-color:white" class="img-info" slot-scope="props">
               <div style="margin:5px">
                 <span style="font-weight:bold;font-size:20px;color:black;">{{props.value.title}}</span>
@@ -172,7 +135,7 @@ import Login from "./Login";
 import Search from "./Search";
 import Vue from "vue";
 export default {
-  name: "Home",
+  name: "History",
   data() {
     return {
       click_themeA: [],
@@ -212,8 +175,7 @@ export default {
       visible_plus: false,
       rsshub: [],
       rsshub_name: "",
-      rsshub_url: "",
-      refreshflag: true
+      rsshub_url: ""
     };
   },
   components: {
@@ -255,10 +217,8 @@ export default {
     recommend2() {},
     recommend3() {},
     favorite() {
-      this.refreshflag = false;
       this.getFavoriteList();
       this.imgsArr = [];
-
       setTimeout(() => {
         for (let i in this.news) {
           for (let j in this.favoriteList) {
@@ -271,6 +231,7 @@ export default {
                 _ID: this.news[i]._ID,
                 type: this.news[i].TYPE
               });
+
               break;
             }
           }
@@ -357,7 +318,6 @@ export default {
       this.getnum += 4;
     },
     initList() {
-      this.refreshflag = true;
       this.getFavoriteList();
       setTimeout(() => {}, 500);
       this.axios
@@ -377,7 +337,7 @@ export default {
             else this.click_themeA[i] = "outlined";
           }
 
-          this.imgsArr = this.initImgsArr(0, this.getnum); //初始化第一次（即页面加载完毕时）要加载的图片数据
+          //this.imgsArr = this.initImgsArr(0, this.getnum); //初始化第一次（即页面加载完毕时）要加载的图片数据
         })
         .catch(function(error) {
           console.log(error);
@@ -407,8 +367,6 @@ export default {
     },
     getFavoriteList() {
       this.axios.get("/get/favorite").then(response => {
-        console.log("+++++++++");
-        console.log(response.data);
         this.favoriteList = response.data;
       });
     },
@@ -440,7 +398,7 @@ export default {
   },
   created() {
     this.initList();
-
+    this.favorite();
     this.getUser();
   },
   mounted() {}
