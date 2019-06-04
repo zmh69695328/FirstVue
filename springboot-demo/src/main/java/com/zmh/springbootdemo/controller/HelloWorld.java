@@ -30,12 +30,10 @@ public class HelloWorld {
 
     @GetMapping("/news")
     @CrossOrigin
-    public String helloworld() {
+    public String getNews() {
         List<RSSItemBean> rssList = mongoTemplate.findAll(RSSItemBean.class, COLLECTION_NAME);
         Collections.shuffle(rssList);
         String jsonOutput = JSON.toJSONString(rssList);
-        // System.out.println("----------- \n" + jsonOutput);
-
         return jsonOutput;
     }
 

@@ -21,9 +21,9 @@
 
         <span>推荐引擎</span>
         <div class="recommend">
-          <span>内容推荐</span>
+          <span>用户推荐</span>
           <a-switch></a-switch>
-          <span>协同过滤</span>
+          <span>内容推荐</span>
           <a-switch></a-switch>
           <span>热点推荐</span>
           <a-switch></a-switch>
@@ -89,9 +89,8 @@
               </div>
               <div class="my-tag">
                 <a-tag color="pink">{{props.value.type}}</a-tag>
-                <a-tag color="blue">Tag 1</a-tag>
-                <a-tag color="black">Tag 1</a-tag>
-                <a-tag color="green">Tag 1</a-tag>
+                <a-tag color="blue">国内</a-tag>
+                <a-tag color="black">政治</a-tag>
                 <a-popover trigger="click" v-model="tag_visible[props.index]">
                   <a @click="deletenews(props.index)" slot="content">不感兴趣</a>
                   <a-icon type="ellipsis"/>
@@ -158,7 +157,7 @@
               <comment ref="mycomment" :user="user" :id="news[index]._ID"></comment>
             </div>
           </a-modal>
-        </div>
+        </div>`
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -317,8 +316,6 @@ export default {
       //  })
     },
     showModal(event, { index, value }) {
-      console.log("-------");
-      console.log(value);
       setTimeout(() => {
         this.$refs.mycomment.myclick();
       }, 100);
@@ -328,7 +325,6 @@ export default {
           break;
         }
       }
-
       this.visible = true;
     },
     handleOk(e) {

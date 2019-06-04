@@ -28,8 +28,6 @@ public class AddComment {
     @PostMapping("/get/comment")
     @CrossOrigin
     public String addComment(@RequestBody Map<String, Object> id) {
-        System.out.println("-------Comment--------");
-        System.out.println(id.get("id"));
         Query query = new Query(Criteria.where("newsid").is(id.get("id")));// 可累加条件
         List<Comment> tmp = mongoTemplate.find(query, Comment.class, "Comment");
         System.out.println(tmp.toString());
@@ -39,8 +37,6 @@ public class AddComment {
     @PostMapping("/post/comment")
     @CrossOrigin
     public void postComment(@RequestBody Comment comment) {
-        System.out.println("------post-------");
-        System.out.println(comment.toString());
         mongoTemplate.save(comment, "Comment");
     }
 }
